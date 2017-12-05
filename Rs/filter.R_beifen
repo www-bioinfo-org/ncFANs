@@ -1,0 +1,112 @@
+args <- commandArgs(TRUE)
+gene.list <- args[1]
+expression.txt <- args[2]
+th <- args[3]
+threshold <- as.numeric(args[4])
+prob <- as.numeric(args[5])
+variance <- as.numeric(args[6])
+outlier <- as.numeric(args[7])
+dir <- args[8]
+method <- args[9]
+
+list <- read.table(gene.list, header = F, sep = "\t",
+                   colClasses = rep("character", 2))
+gene.list <- list[, 2]
+names(gene.list) <- list[, 1]
+
+exp <- read.table(expression.txt, header = T, row.names = 1,
+                      sep = "\t")
+exp <- as.matrix(exp)
+#if (length(gene.list) < nrow(exp)) {
+#    write.table(names(gene.list),file="tmp")
+#  exp <- exp[names(gene.list), ]
+#}
+
+sames <- apply(exp, 1, function(x) {max(table(as.character(x)))})
+
+
+deprecated.genes <- rownames(exp)[sames >= ncol(exp) * 2 / 3]
+expdata<- exp[sames < ncol(exp) * 2 / 3, ]
+#if (method == "FPKM") {
+#  exp.rowsums <- rowSums(exp)
+#  deprecated.genes <- rownames(exp)[exp.rowsums == 0]
+#  expdata<- exp[exp.rowsums !=0, ]
+#} else {
+#  
+#}
+
+if (th != "no") {
+  tmp <- rownames(expdata)[rowSums(expdata > threshold) == 0]
+  deprecated.genes <- union(deprecated.genes, tmp)
+  expdata <- expdata[rowSums(expdata > threshold) > 0, ]
+}
+#print("threshold")
+#print(dim(expdata))
+
+# outliers
+for (i in 1:ncol(expdata) ) {
+  quan <- quantile(expdata[, i], c(0.25, 0.75))
+  max <- quan[2] + outlier * (quan[2] - quan[1])
+  tmp <- rownames(expdata)[expdata[, i] > max]
+  deprecated.genes <- union(deprecated.genes, tmp)
+}
+expdata <- expdata[setdiff(rownames(expdata), deprecated.genes), ]
+#print("outliers")
+#print(dim(expdata))
+
+coding.list <- names(gene.list)[grep("^coding", gene.list, ignore.case = T)]
+coding.list <- intersect(coding.list, rownames(expdata))
+#print("coding.list")
+#print(length(coding.list))
+noncoding.list <- names(gene.list)[grep("noncoding", gene.list, ignore.case = T)]
+noncoding.list <- intersect(noncoding.list, rownames(expdata))
+#print("noncoding.list")
+#print(length(noncoding.list))
+coding.exp <- expdata[coding.list, ]
+#print(dim(coding.exp))
+noncoding.exp <- expdata[noncoding.list, ]
+#print(dim(noncoding.exp))
+
+if (prob > 0 ) {
+  t <- quantile(coding.exp, prob)
+  tmp <- rownames(noncoding.exp)[rowSums(noncoding.exp > t) == 0]
+  deprecated.genes <- c(deprecated.genes, tmp)
+  noncoding.exp <- noncoding.exp[rowSums(noncoding.exp > t) > 0, ]
+}
+
+# filtering variance outliers
+coding.var <- apply(coding.exp, 1, var)
+noncoding.var <- apply(noncoding.exp, 1, var)
+quan <- quantile(c(coding.var, noncoding.var), variance)
+
+tmp <- rownames(coding.exp)[coding.var <= variance]
+deprecated.genes <- union(deprecated.genes, tmp)
+coding.exp <- coding.exp[coding.var > variance, ]
+
+tmp <- rownames(noncoding.exp)[noncoding.var <= variance]
+deprecated.genes <- union(deprecated.genes, tmp)
+noncoding.exp <- noncoding.exp[noncoding.var > variance, ]
+
+path <- file.path(dir, "filtered.expression.txt")
+write.table(coding.exp, file = path, row.names = T, col.names = T,
+            sep = "\t", quote = F)
+write.table(noncoding.exp, file = path, row.names = T, col.names = F,
+            sep = "\t", quote = F, append = T)
+
+coding.list <- cbind(rownames(coding.exp), rep("c", nrow(coding.exp)))
+type <- ifelse(grepl("Novel", gene.list[rownames(noncoding.exp)],
+               ignore.case = T), "nn", "kn")
+noncoding.list <- cbind(rownames(noncoding.exp), type)
+path <- file.path(dir, "filtered.gene.list")
+write.table(coding.list, file = path, row.names = F, col.names = F,
+            sep = "\t", quote = F)
+write.table(noncoding.list, file = path, row.names = F, col.names = F,
+            sep = "\t", quote = F, append = T)
+
+path <- file.path(dir, "deprecated.expression.txt")
+write.table(exp[deprecated.genes, ], file = path, row.names = T,
+            col.names = T, sep = "\t", quote = F)
+path <- file.path(dir, "deprecated.gene.list")
+gene.list <- cbind(deprecated.genes, gene.list[deprecated.genes])
+write.table(gene.list, file = path, row.names = F, 
+            col.names =F, sep = "\t", quote = F)
