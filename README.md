@@ -1,7 +1,7 @@
 # ncFANs
 ## About ncFANS
 
-ncFANs has introduced a highly efficient way of re-using the abundant pre-existing microarray data. It is expected that the strategies developed in these studies will provide new clues and approaches for the study of lncRNA functions, and the predicted functions will give directions for molecular biological experiments.
+ncFANs is a software to predict functions of genes, especially lncRNAs.ncFANs has introduced a highly efficient way of re-using the abundant pre-existing microarray data. It is expected that the strategies developed in these studies will provide new clues and approaches for the study of lncRNA functions, and the predicted functions will give directions for molecular biological experiments.
 
 ## Install ncFANs
 
@@ -25,7 +25,7 @@ ncFANs needs 6 parameters to run correctly, and the information of these paramet
 ### Example
 
     cd /your/install/path
-    python ncFANs.py example/mouse_uniq.fpkm example/noncoding.list example/coding.list /example/human_custom_go /example/GOTerm.txt /your/outdir/
+    python ncFANs.py -e example/mouse_uniq.fpkm -k example/noncoding.list -c example/coding.list -g /example/human_custom_go -t /example/GOTerm.txt -o /your/outdir/
 
 ## Citation
 [Guo X, Gao L, Liao Q, et al. Long non-coding RNAs function annotation: a global prediction method based on bi-colored networks[J]. Nucleic Acids Research, 2013, 41(2):e35.](https://www.ncbi.nlm.nih.gov/pubmed/23132350)

@@ -1,4 +1,4 @@
-import os, sys, shutil
+import os, sys, shutil, optparse
 from subprocess import call as subcall
 
 
@@ -108,16 +108,39 @@ def funcPredict_ncFANs(ncFANsDir, expFile, knoncoding, coding, customGo, termGO,
 
 
 if __name__ == '__main__':
+
+    parse = optparse.OptionParser()
+    parse.add_option('-e', '--expfile', dest='expFile', action='store', metavar='exp file',
+                     help='Expression profile file')
+
+    parse.add_option('-k', '--knoncodingfile', dest='knoncodingFile', action='store', metavar='noncoding files',
+                     help='A file with only one column of noncoding gene names')
+
+    parse.add_option('-c', '--codingfile', dest='coding', action='store', metavar='coding files',
+                     help='A file with only one column of coding gene names')
+
+    parse.add_option('-g', '--customgo', dest='customGo', action='store', metavar='customGO files',
+                     help='A file of the map of gene names and GO IDs')
+
+    parse.add_option('-t', '--termgo', dest='termGO', action='store', metavar='termGO files',
+                     help='A file containing GO information')
+
+    parse.add_option('-o', '--outdir', dest='outDir', action='store', metavar='output dir',
+                     help='directory to store your results')
+
     filepath = sys.argv[0]
     if "/" in filepath:
         ncFANsDir = os.path.dirname(filepath)
     else:
         ncFANsDir = "."
-    expFile = sys.argv[1]
-    knoncoding = sys.argv[2]
-    coding = sys.argv[3]
-    customGo = sys.argv[4]
-    termGO = sys.argv[5]
-    outDir = sys.argv[6]
+
+    (options, args) = parse.parse_args()
+
+    expFile = options.expFile
+    knoncoding = options.knoncodingFile
+    coding = options.coding
+    customGo = options.customGo
+    termGO = options.termGO
+    outDir = options.outDir
     # print(ncFANsDir, expFile, knoncoding, coding, customGo, termGO, outDir)
     funcPredict_ncFANs(ncFANsDir, expFile, knoncoding, coding, customGo, termGO, outDir)
