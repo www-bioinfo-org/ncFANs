@@ -33,6 +33,7 @@ ncFANs needs 6 parameters to run correctly, and the information of these paramet
     cd /your/install/path
     python ncFANs.py -e example/mouse_uniq.fpkm -k example/noncoding.list -c example/coding.list -g /example/human_custom_go -t /example/GOTerm.txt -o /your/outdir/
 
+ncFANs currently supports the analysis of two species of human and mouse species. You can find the corresponding customGO files in the ./customGO_file directory
 ## Citation
 [Guo X, Gao L, Liao Q, et al. Long non-coding RNAs function annotation: a global prediction method based on bi-colored networks[J]. Nucleic Acids Research, 2013, 41(2):e35.](https://www.ncbi.nlm.nih.gov/pubmed/23132350)
 
