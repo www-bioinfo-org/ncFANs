@@ -9,17 +9,23 @@ ncFANs is a software to predict functions of genes, especially lncRNAs.ncFANs ha
 ncFANs needs 6 parameters to run correctly, and the information of these parameters is as follows. A demo command is also provided.
 
 ### Parameters
-* expFile
+* -e expFile
+
     Expression profile file
-* knoncodingFile 
+* -n noncodingList
+
     A file with only one column of noncoding gene names
-* coding
+* -c codingList
+
     A file with only one column of coding gene names
-* customGo
+* -g customGo
+
     A file of the map of gene names and GO IDs
-* termGO
+* -t termGO
+
     A file containing GO information
-* outDir
+* -o outDir
+
   directory to store your results
  
 ### Example

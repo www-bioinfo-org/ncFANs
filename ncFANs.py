@@ -113,10 +113,10 @@ if __name__ == '__main__':
     parse.add_option('-e', '--expfile', dest='expFile', action='store', metavar='exp file',
                      help='Expression profile file')
 
-    parse.add_option('-k', '--knoncodingfile', dest='knoncodingFile', action='store', metavar='noncoding files',
+    parse.add_option('-n', '--noncodinglist', dest='noncodingList', action='store', metavar='noncoding files',
                      help='A file with only one column of noncoding gene names')
 
-    parse.add_option('-c', '--codingfile', dest='coding', action='store', metavar='coding files',
+    parse.add_option('-c', '--codinglist', dest='codingList', action='store', metavar='coding files',
                      help='A file with only one column of coding gene names')
 
     parse.add_option('-g', '--customgo', dest='customGo', action='store', metavar='customGO files',
@@ -137,8 +137,8 @@ if __name__ == '__main__':
     (options, args) = parse.parse_args()
 
     expFile = options.expFile
-    knoncoding = options.knoncodingFile
-    coding = options.coding
+    noncoding = options.noncodingList
+    coding = options.codingList
     customGo = options.customGo
     termGO = options.termGO
     outDir = options.outDir
