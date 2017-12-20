@@ -143,4 +143,4 @@ if __name__ == '__main__':
     termGO = options.termGO
     outDir = options.outDir
     # print(ncFANsDir, expFile, knoncoding, coding, customGo, termGO, outDir)
-    funcPredict_ncFANs(ncFANsDir, expFile, knoncoding, coding, customGo, termGO, outDir)
+    funcPredict_ncFANs(ncFANsDir, expFile, noncoding, coding, customGo, termGO, outDir)
