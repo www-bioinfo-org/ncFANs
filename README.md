@@ -31,7 +31,7 @@ ncFANs needs 6 parameters to run correctly, and the information of these paramet
 ### Example
 
     cd /your/install/path
-    python ncFANs.py -e example/mouse_uniq.fpkm -k example/noncoding.list -c example/coding.list -g /example/human_custom_go -t /example/GOTerm.txt -o /your/outdir/
+    python ncFANs.py -e example/mouse_uniq.fpkm -n example/noncoding.list -c example/coding.list -g /example/human_custom_go -t /example/GOTerm.txt -o /your/outdir/
 
 ncFANs currently supports the analysis of two species of human and mouse species. You can find the corresponding customGO files in the ./customGO_file directory
 ## Citation
