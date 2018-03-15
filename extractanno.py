@@ -70,7 +70,7 @@ print "geneList:",len(testList)
 testList=set(testList)
 print "geneList set :",len(testList)
 
-f=file(outputFile,"w+")
+f=open(outputFile,"w+")
 for key in SampleGene:
     writeLine=key
     writeLine+="\t"
