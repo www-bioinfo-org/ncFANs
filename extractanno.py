@@ -21,13 +21,14 @@ f=open(inputFile)
 fline=f.readline()
 if fline:
     fline=f.readline()
-
+f_exp = open(outputFile+"-exp.txt",'w')
 while fline:
-    fline=fline.strip("\n").split("\t")
-    fline=fline[0]
+    line=fline.strip("\n").split("\t")
+    gene=line[0]
     #print fline
-    if fline not in SampleGene:
-       SampleGene[fline]="0"
+    if gene not in SampleGene:
+       SampleGene[gene]="0"
+       f_exp.write(fline)
     else:
        print "Warning: Dup name! Filtered!"
 
@@ -35,7 +36,7 @@ while fline:
     #print fline[0]
     fline=f.readline()
 f.close()
-
+f_exp.close()
 f=open(refNoncoding)
 fline=f.readline()
 while fline:
