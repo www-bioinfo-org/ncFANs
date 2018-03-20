@@ -26,6 +26,8 @@ def moveFile(inFile, outFile):
 class ncFANs:
     def __init__(self, ncFANsDir):
         self.path = ncFANsDir
+        if not os.path.exists(self.path):
+            os.mkdir(self.path)
 
     def filterGeneList(self, expFile, geneList, outDir):
         path = self.path
@@ -85,7 +87,7 @@ def funcPredict_ncFANs(ncFANsDir, expFile, knoncoding, coding, customGo, termGO,
     expFileGenelist = os.path.join(outDir, "%s-genelist" % (os.path.split(expFile)[1]))
     lnc.extractAndAnno(expFile, expFileGenelist, knoncoding, coding)
 
-    lnc.filterGeneList(expFile, expFileGenelist, outDir)
+    lnc.filterGeneList(expFileGenelist+"-exp.txt", expFileGenelist, outDir)
 
     genelistOut = "%s/filtered.gene.list-1" % (outDir)
     filterExpFile = "%s/filtered.expression.txt" % (outDir)
